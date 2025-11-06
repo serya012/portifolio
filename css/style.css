@@ -144,6 +144,12 @@ nav {
     color: var(--primary);
 }
 
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .theme-toggle {
     background: none;
     border: none;
@@ -239,6 +245,11 @@ h2::after {
     text-align: center;
     transition: var(--transition);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    height: auto;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .skill-card:hover {
@@ -315,6 +326,7 @@ h2::after {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 50px;
+    align-items: start;
 }
 
 .contact-info {
@@ -485,7 +497,7 @@ footer {
 .btn-outline {
     background: transparent;
     border: 2px solid var(--accent);
-    margin-left: 15px;
+    margin-left: 0;
 }
 
 .btn-full {
@@ -722,203 +734,12 @@ footer {
     transform: rotate(90deg);
 }
 
-/* ===== RESPONSIVO ===== */
-@media (max-width: 768px) {
-    .about-content, .contact-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .nav-links {
-        display: none;
-    }
-    
-    .mobile-menu-btn {
-        display: block;
-    }
-    
-    h1 {
-        font-size: 2.2rem;
-    }
-    
-    .tagline {
-        font-size: 1.2rem;
-    }
-    
-    section {
-        padding: 60px 0;
-    }
-    
-    h2 {
-        font-size: 2rem;
-        margin-bottom: 30px;
-    }
-    
-    .skills-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .portfolio-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .nav-container {
-        padding: 10px 15px;
-    }
-    
-    .hero-content {
-        padding: 0 15px;
-    }
-    
-    /* Mobile Menu */
-    .nav-links {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background: var(--bg);
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        transform: translateX(-100%);
-        opacity: 0;
-        transition: var(--transition);
-        z-index: 1000;
-    }
-    
-    .nav-links.active {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    
-    .nav-links li {
-        margin: 15px 0;
-    }
-    
-    .nav-links a {
-        font-size: 1.2rem;
-        padding: 10px 20px;
-    }
-    
-    /* Close button */
-    .nav-links::before {
-        content: '✕';
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        font-size: 1.5rem;
-        color: var(--text);
-        cursor: pointer;
-    }
-    
-    .btn-outline {
-        margin-left: 0;
-        margin-top: 10px;
-    }
-    
-    .footer-content {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 30px;
-    }
-    
-    .about-features {
-        grid-template-columns: 1fr;
-    }
-    
-    .project-links {
-        flex-direction: column;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.8rem;
-    }
-    
-    .tagline {
-        font-size: 1rem;
-    }
-    
-    .btn {
-        padding: 10px 25px;
-        font-size: 0.9rem;
-    }
-    
-    .profile-img-placeholder {
-        height: 250px;
-    }
-    
-    .skill-card {
-        padding: 20px;
-    }
-    
-    .portfolio-content {
-        padding: 15px;
-    }
-    
-    .hero-content .btn {
-        display: block;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    
-    .hero-content .btn-outline {
-        margin-top: 0;
-    }
-    
-    /* Ajustes para animação do ano em mobile */
-    .digit-wrapper {
-        width: 0.5em;
-    }
-}
-
-/* Animações para o dropdown */
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-
-.validation-error {
-    animation: shake 0.3s ease !important;
-}
-
-/* Estilo para dropdown com valor selecionado */
-.custom-select.has-value select {
-    background: linear-gradient(135deg, var(--card-bg), #f8f9fa);
-    border-color: var(--primary);
-    font-weight: 500;
-}
-
-/* Efeito de hover melhorado */
-.custom-select:hover select {
-    border-color: var(--primary);
-    box-shadow: 0 2px 8px rgba(138, 43, 226, 0.1);
-}
-
-/* Estado focado */
-.custom-select.focused select {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
-}
-
-/* Dark mode adjustments */
-.dark-mode .custom-select select {
-    background: var(--card-bg);
-    color: var(--text);
-    border-color: #444;
-}
-
-.dark-mode .custom-select select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(157, 78, 221, 0.2);
-}
-
-.dark-mode .custom-select.has-value select {
-    background: linear-gradient(135deg, var(--card-bg), #2a2a2a);
+/* Hero actions */
+.hero-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 /* ===== FORMULÁRIO COM DROPDOWN ===== */
@@ -996,19 +817,6 @@ footer {
     color: var(--primary);
 }
 
-/* Estilo para opções agrupadas (se quiser categorizar) */
-.custom-select select optgroup {
-    background: var(--card-bg);
-    color: var(--primary);
-    font-weight: bold;
-    padding: 10px;
-}
-
-.custom-select select optgroup option {
-    padding-left: 20px;
-    background: var(--bg);
-}
-
 /* Animações para o dropdown */
 @keyframes dropdownFade {
     from {
@@ -1043,14 +851,44 @@ footer {
     background: linear-gradient(135deg, var(--card-bg), var(--bg));
 }
 
-/* Badge para opções selecionadas (visual) */
-.option-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    background: var(--primary);
-    color: white;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    margin-left: 5px;
-    vertical-align: middle;
+/* ===== CORREÇÕES ESPECÍFICAS ===== */
+
+/* Garante que o menu mobile não apareça em desktop */
+@media (min-width: 769px) {
+    .mobile-menu-btn {
+        display: none !important;
+    }
+    
+    .menu-overlay {
+        display: none !important;
+    }
+}
+
+/* Remove margens conflitantes dos botões */
+.btn-outline {
+    margin-left: 0;
+}
+
+/* Garante consistência visual */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Animações para validação */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.validation-error {
+    animation: shake 0.3s ease !important;
 }

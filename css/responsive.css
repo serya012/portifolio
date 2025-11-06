@@ -53,10 +53,16 @@
         font-size: 0.9rem;
     }
     
+    .hero-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+    
     .btn-outline {
         margin-left: 0;
-        margin-top: 10px;
-        display: block;
+        display: inline-block;
     }
     
     /* Sections */
@@ -145,7 +151,7 @@
         justify-content: center;
     }
     
-    /* ===== MENU HAMBURGUER - CORRIGIDO ===== */
+    /* ===== MENU HAMBURGUER CORRIGIDO ===== */
     .mobile-menu-btn {
         display: block !important;
         background: none;
@@ -178,6 +184,7 @@
         opacity: 0;
         transition: all 0.3s ease-in-out;
         z-index: 1000;
+        display: flex !important;
     }
     
     .nav-links.active {
@@ -235,7 +242,7 @@
         transform: translateY(-1px);
     }
     
-    /* Ícones para cada item do menu (opcional) */
+    /* Ícones para cada item do menu */
     .nav-links li:nth-child(1) a::before {
         content: "🏠 ";
     }
@@ -278,7 +285,7 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     
-    .nav-links::after:hover {
+    .nav-links:hover::after {
         color: var(--primary);
         transform: scale(1.1);
         background: var(--primary);
@@ -330,6 +337,12 @@
     .nav-container {
         padding: 12px 15px;
     }
+    
+    .nav-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
 }
 
 /* Mobile Small */
@@ -355,7 +368,7 @@
         font-size: 0.9rem;
     }
     
-    .hero-content .btn {
+    .hero-actions .btn {
         display: block;
         width: 100%;
         margin-bottom: 10px;
@@ -447,13 +460,6 @@
         top: 25px;
         font-size: 1.3rem;
     }
-    
-    /* Remove ícones em mobile muito pequeno se necessário */
-    @media (max-width: 360px) {
-        .nav-links a::before {
-            content: "" !important;
-        }
-    }
 }
 
 /* Mobile Extra Small */
@@ -483,7 +489,6 @@
 }
 
 /* ===== DARK MODE PARA MENU MOBILE ===== */
-
 @media (max-width: 768px) {
     .dark-mode .nav-links {
         background: var(--bg);
@@ -506,7 +511,7 @@
         color: var(--text);
     }
     
-    .dark-mode .nav-links::after:hover {
+    .dark-mode .nav-links:hover::after {
         background: var(--primary);
         color: white;
     }
@@ -517,7 +522,6 @@
 }
 
 /* ===== ORIENTAÇÃO LANDSCAPE ===== */
-
 @media (max-width: 768px) and (orientation: landscape) {
     .nav-links {
         padding: 80px 20px;
@@ -554,7 +558,6 @@
 }
 
 /* ===== HIGH DPI DISPLAYS ===== */
-
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .mobile-menu-btn {
         -webkit-font-smoothing: antialiased;
@@ -563,7 +566,6 @@
 }
 
 /* ===== REDUÇÃO DE MOVIMENTO ===== */
-
 @media (prefers-reduced-motion: reduce) {
     .nav-links,
     .nav-links li,
@@ -579,5 +581,320 @@
     
     .menu-overlay {
         animation: none;
+    }
+}
+
+/* ===== MENU HAMBURGUER REFEITO ===== */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block !important;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text);
+        z-index: 1002;
+        padding: 8px;
+        border-radius: 5px;
+        transition: var(--transition);
+        width: 44px;
+        height: 44px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .mobile-menu-btn:hover {
+        background: var(--card-bg);
+        transform: scale(1.05);
+    }
+    
+    .mobile-menu-btn.active {
+        color: var(--primary);
+    }
+    
+    /* Menu Mobile */
+    .nav-links.mobile-active {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 85%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--bg);
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 80px 25px 30px;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1001;
+        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
+        overflow-y: auto;
+        display: flex !important;
+    }
+    
+    .nav-links.mobile-active.show {
+        transform: translateX(0);
+    }
+    
+    .nav-links.mobile-active li {
+        margin: 0;
+        width: 100%;
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: all 0.3s ease;
+    }
+    
+    .nav-links.mobile-active.show li {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    /* Delay para animação dos itens do menu */
+    .nav-links.mobile-active.show li:nth-child(1) { transition-delay: 0.1s; }
+    .nav-links.mobile-active.show li:nth-child(2) { transition-delay: 0.15s; }
+    .nav-links.mobile-active.show li:nth-child(3) { transition-delay: 0.2s; }
+    .nav-links.mobile-active.show li:nth-child(4) { transition-delay: 0.25s; }
+    .nav-links.mobile-active.show li:nth-child(5) { transition-delay: 0.3s; }
+    
+    .nav-links.mobile-active a {
+        font-size: 1.1rem;
+        padding: 15px 20px;
+        display: block;
+        text-align: left;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        background: transparent;
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 500;
+        margin: 5px 0;
+        border: 2px solid transparent;
+        width: 100%;
+        position: relative;
+        padding-left: 50px;
+    }
+    
+    .nav-links.mobile-active a::before {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+    }
+    
+    .nav-links.mobile-active a:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateX(5px);
+        border-color: var(--primary);
+    }
+    
+    .nav-links.mobile-active a:active {
+        transform: translateX(2px);
+    }
+    
+    /* Ícones para cada item do menu */
+    .nav-links.mobile-active li:nth-child(1) a::before {
+        content: "🏠";
+    }
+    
+    .nav-links.mobile-active li:nth-child(2) a::before {
+        content: "👤";
+    }
+    
+    .nav-links.mobile-active li:nth-child(3) a::before {
+        content: "💻";
+    }
+    
+    .nav-links.mobile-active li:nth-child(4) a::before {
+        content: "📁";
+    }
+    
+    .nav-links.mobile-active li:nth-child(5) a::before {
+        content: "📞";
+    }
+    
+    /* Botão de fechar */
+    .menu-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--card-bg);
+        border: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        color: var(--text);
+        font-size: 1.3rem;
+        z-index: 1003;
+    }
+    
+    .menu-close-btn:hover {
+        background: var(--primary);
+        color: white;
+        transform: rotate(90deg);
+    }
+    
+    /* Título do menu mobile */
+    .menu-title {
+        position: absolute;
+        top: 25px;
+        left: 25px;
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: var(--primary);
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    /* Overlay */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    /* Prevent body scroll */
+    body.menu-open {
+        overflow: hidden;
+    }
+    
+    /* Ajuste no container da nav para mobile */
+    .nav-container {
+        padding: 12px 15px;
+    }
+    
+    .nav-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    /* Esconde o menu original em mobile */
+    .nav-links:not(.mobile-active) {
+        display: none !important;
+    }
+}
+
+/* Mobile Small */
+@media (max-width: 480px) {
+    .nav-links.mobile-active {
+        width: 90%;
+        padding: 70px 20px 25px;
+    }
+    
+    .nav-links.mobile-active a {
+        font-size: 1rem;
+        padding: 12px 15px;
+        padding-left: 45px;
+    }
+    
+    .menu-close-btn {
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .menu-title {
+        top: 20px;
+        left: 20px;
+        font-size: 1.2rem;
+    }
+}
+
+/* ===== DARK MODE PARA MENU MOBILE ===== */
+@media (max-width: 768px) {
+    .dark-mode .nav-links.mobile-active {
+        background: var(--bg);
+    }
+    
+    .dark-mode .nav-links.mobile-active a {
+        color: var(--text);
+        background: transparent;
+    }
+    
+    .dark-mode .nav-links.mobile-active a:hover {
+        background: var(--primary);
+        color: white;
+    }
+    
+    .dark-mode .menu-close-btn {
+        background: var(--card-bg);
+        color: var(--text);
+    }
+    
+    .dark-mode .menu-close-btn:hover {
+        background: var(--primary);
+        color: white;
+    }
+    
+    .dark-mode .menu-overlay {
+        background: rgba(0, 0, 0, 0.7);
+    }
+}
+
+/* ===== ORIENTAÇÃO LANDSCAPE ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .nav-links.mobile-active {
+        padding: 70px 25px 20px;
+        overflow-y: auto;
+    }
+    
+    .nav-links.mobile-active li {
+        margin: 2px 0;
+    }
+    
+    .nav-links.mobile-active a {
+        padding: 10px 15px;
+        padding-left: 45px;
+        font-size: 1rem;
+    }
+    
+    .menu-title {
+        top: 15px;
+    }
+    
+    .menu-close-btn {
+        top: 15px;
+    }
+}
+
+/* ===== REDUÇÃO DE MOVIMENTO ===== */
+@media (prefers-reduced-motion: reduce) {
+    .nav-links.mobile-active,
+    .nav-links.mobile-active li,
+    .mobile-menu-btn,
+    .nav-links.mobile-active a,
+    .menu-close-btn,
+    .menu-overlay {
+        transition: none;
+        animation: none;
+    }
+    
+    .nav-links.mobile-active.show li {
+        transition: none;
     }
 }
