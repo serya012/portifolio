@@ -551,7 +551,7 @@ class ContactFormSystem {
     bindFormEvents() {
         const contactForm = document.getElementById('contactForm');
         if (!contactForm) return;
-
+        //TESTAR
         contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
         
         // Validação em tempo real
