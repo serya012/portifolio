@@ -1,57 +1,30 @@
 // =============================================
-// CONFIGURAÇÃO GLOBAL DO PORTFÓLIO
+// SISTEMA PRINCIPAL DO PORTFÓLIO
 // =============================================
 
 
-
-const PORTFOLIO_CONFIG = {
-    // INFORMAÇÕES DO AUTOR
-    AUTHOR: "Tarcísio Carneiro",
-
-    // CONFIGURAÇÕES DO EMAILJS
-    EMAILJS: {
-        PUBLIC_KEY: "IHYyQz4Gbk-EPOTil",
-        SERVICE_ID: "service_v7jlvg8",
-        TEMPLATE_ID: "template_wper866"
-    }
-};
-
-// =============================================
-// SISTEMA DE MÁSCARA DE TELEFONE
-// =============================================
 
 class PhoneMaskSystem {
-    constructor() {
-        this.phoneInput = null;
+    constructor(inputElement) {
+        this.input = inputElement;
+        this.handleInput = this.handleInput.bind(this);
+        this.handleFocus = this.handleFocus.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
+        this.handleKeydown = this.handleKeydown.bind(this);
     }
 
     init() {
-        this.phoneInput = document.getElementById('phone');
-        if (!this.phoneInput) return;
-
-        this.bindPhoneEvents();
-        console.log('📞 Sistema de máscara de telefone inicializado!');
+        this.bindEvents();
     }
 
-    bindPhoneEvents() {
-        this.phoneInput.addEventListener('input', (e) => {
-            this.applyPhoneMask(e);
-        });
-
-        this.phoneInput.addEventListener('keydown', (e) => {
-            this.handlePhoneKeydown(e);
-        });
-
-        this.phoneInput.addEventListener('focus', () => {
-            this.handlePhoneFocus();
-        });
-
-        this.phoneInput.addEventListener('blur', () => {
-            this.validatePhoneFormat();
-        });
+    bindEvents() {
+        this.input.addEventListener('input', this.handleInput);
+        this.input.addEventListener('focus', this.handleFocus);
+        this.input.addEventListener('blur', this.handleBlur);
+        this.input.addEventListener('keydown', this.handleKeydown);
     }
 
-    applyPhoneMask(e) {
+    handleInput(e) {
         let value = e.target.value.replace(/\D/g, '');
         value = value.substring(0, 11);
 
@@ -60,7 +33,31 @@ class PhoneMaskSystem {
         }
 
         e.target.value = value;
-        this.updatePhoneValidationState(value);
+        this.updateValidationState(value);
+    }
+
+    handleKeydown(e) {
+        if ([8, 9, 13, 27, 46].includes(e.keyCode) ||
+            (e.keyCode >= 37 && e.keyCode <= 40)) {
+            return;
+        }
+
+        if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    }
+
+    handleFocus() {
+        if (!this.input.value) {
+            this.input.value = '(';
+        }
+        this.input.classList.add('phone-typing');
+        this.clearError();
+    }
+
+    handleBlur() {
+        this.input.classList.remove('phone-typing');
+        this.validatePhoneFormat();
     }
 
     formatPhoneNumber(numbers) {
@@ -79,247 +76,188 @@ class PhoneMaskSystem {
         return numbers;
     }
 
-    handlePhoneKeydown(e) {
-        if ([8, 9, 13, 27, 46].includes(e.keyCode) ||
-            (e.keyCode >= 37 && e.keyCode <= 40)) {
-            return;
+    updateValidationState(value) {
+        if (value.length === 15 && this.isValidPhone(value)) {
+            this.input.classList.add('phone-valid');
+            this.input.classList.remove('phone-invalid');
+            this.clearError();
+        } else if (value.length > 0 && value.length < 15) {
+            this.input.classList.remove('phone-valid');
         }
-
-        if ((e.keyCode < 48 || e.keyCode > 57) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-    }
-
-    handlePhoneFocus() {
-        if (!this.phoneInput.value) {
-            this.phoneInput.value = '(';
-            this.setCursorPosition(1);
-        }
-
-        this.phoneInput.classList.remove('phone-invalid');
-        this.phoneInput.classList.add('phone-typing');
     }
 
     validatePhoneFormat() {
-        const value = this.phoneInput.value;
-        this.phoneInput.classList.remove('phone-typing');
+        const value = this.input.value;
 
         if (value && !this.isValidPhone(value)) {
-            this.phoneInput.classList.add('phone-invalid');
-            this.showPhoneHint('Telefone incompleto. Use: (21) 99999-9999');
+            this.input.classList.add('phone-invalid');
+            this.showError('Telefone incompleto. Use: (21) 99999-9999');
         } else {
-            this.phoneInput.classList.remove('phone-invalid');
-            this.hidePhoneHint();
+            this.input.classList.remove('phone-invalid');
+            this.clearError();
         }
-    }
-
-    updatePhoneValidationState(value) {
-        if (value.length === 15) {
-            this.phoneInput.classList.add('phone-valid');
-            this.phoneInput.classList.remove('phone-invalid');
-            this.hidePhoneHint();
-        } else if (value.length > 0 && value.length < 15) {
-            this.phoneInput.classList.remove('phone-valid');
-        }
-    }
-
-    setCursorPosition(position) {
-        setTimeout(() => {
-            this.phoneInput.setSelectionRange(position, position);
-        }, 0);
-    }
-
-    showPhoneHint(message) {
-        this.hidePhoneHint();
-
-        const hint = document.createElement('div');
-        hint.className = 'phone-hint';
-        hint.textContent = message;
-        hint.style.cssText = `
-            color: #f44336;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            animation: fadeIn 0.3s ease;
-        `;
-
-        this.phoneInput.parentNode.appendChild(hint);
-    }
-
-    hidePhoneHint() {
-        const existingHint = this.phoneInput.parentNode.querySelector('.phone-hint');
-        if (existingHint) existingHint.remove();
     }
 
     isValidPhone(phone) {
         return /^\(\d{2}\)\s?\d{4,5}-\d{4}$/.test(phone);
     }
 
-    cleanPhoneNumber(phone) {
-        return phone.replace(/\D/g, '');
+    showError(message) {
+        this.clearError();
+        const errorElement = document.createElement('div');
+        errorElement.className = 'phone-hint';
+        errorElement.textContent = message;
+        this.input.parentNode.appendChild(errorElement);
+    }
+
+    clearError() {
+        const existingError = this.input.parentNode.querySelector('.phone-hint');
+        if (existingError) existingError.remove();
+    }
+
+    destroy() {
+        this.input.removeEventListener('input', this.handleInput);
+        this.input.removeEventListener('focus', this.handleFocus);
+        this.input.removeEventListener('blur', this.handleBlur);
+        this.input.removeEventListener('keydown', this.handleKeydown);
     }
 }
-
-// =============================================
-// SISTEMA DE MENU MOBILE
-// =============================================
 
 class MobileMenu {
     constructor() {
         this.isOpen = false;
-        this.init();
+        this.menuBtn = document.getElementById('mobileMenuBtn');
+        this.navLinks = document.querySelector('.nav-links');
+        this.menuOverlay = document.getElementById('menuOverlay');
+        this.handleClick = this.handleClick.bind(this);
+        this.handleKeydown = this.handleKeydown.bind(this);
+        this.handleResize = this.handleResize.bind(this);
     }
 
     init() {
-        this.createMobileMenu();
         this.bindEvents();
-        console.log('🍔 Menu mobile inicializado!');
-    }
-
-    createMobileMenu() {
-        const existingOverlay = document.querySelector('.menu-overlay');
-        const existingMobileMenu = document.querySelector('.nav-links.mobile-active');
-
-        if (existingOverlay) existingOverlay.remove();
-        if (existingMobileMenu) existingMobileMenu.remove();
-
-        this.overlay = document.createElement('div');
-        this.overlay.className = 'menu-overlay';
-        document.body.appendChild(this.overlay);
-
-        const originalNav = document.querySelector('.nav-links');
-        if (originalNav) {
-            this.mobileNav = originalNav.cloneNode(true);
-            this.mobileNav.classList.add('mobile-active');
-
-            const closeBtn = document.createElement('button');
-            closeBtn.className = 'menu-close-btn';
-            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
-            closeBtn.setAttribute('aria-label', 'Fechar menu');
-
-            const title = document.createElement('div');
-            title.className = 'menu-title';
-            title.textContent = 'Menu';
-
-            this.mobileNav.prepend(title);
-            this.mobileNav.prepend(closeBtn);
-
-            document.body.appendChild(this.mobileNav);
-        }
     }
 
     bindEvents() {
-        const menuBtn = document.getElementById('mobileMenuBtn');
+        this.menuBtn.addEventListener('click', this.handleClick);
+        this.menuOverlay.addEventListener('click', this.handleClick);
+        document.addEventListener('keydown', this.handleKeydown);
+        window.addEventListener('resize', this.handleResize);
 
-        if (!menuBtn) {
-            console.error('❌ Botão do menu não encontrado!');
-            return;
-        }
-
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleMenu();
+        // Fechar menu ao clicar em links
+        this.navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => this.close());
         });
+    }
 
-        this.overlay.addEventListener('click', () => this.closeMenu());
+    handleClick(e) {
+        e.stopPropagation();
+        this.toggle();
+    }
 
-        const closeBtn = document.querySelector('.menu-close-btn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => this.closeMenu());
-        }
-
-        if (this.mobileNav) {
-            this.mobileNav.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => this.closeMenu());
-            });
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isOpen) this.closeMenu();
-        });
-
-        if (this.mobileNav) {
-            this.mobileNav.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
+    handleKeydown(e) {
+        if (e.key === 'Escape' && this.isOpen) {
+            this.close();
         }
     }
 
-    toggleMenu() {
-        this.isOpen ? this.closeMenu() : this.openMenu();
+    handleResize() {
+        if (window.innerWidth > 768 && this.isOpen) {
+            this.close();
+        }
     }
 
-    openMenu() {
-        const menuBtn = document.getElementById('mobileMenuBtn');
+    toggle() {
+        this.isOpen ? this.close() : this.open();
+    }
 
-        if (!this.mobileNav || !menuBtn) return;
-
-        this.mobileNav.classList.add('show');
-        this.overlay.classList.add('active');
+    open() {
+        this.navLinks.classList.add('active');
+        this.menuOverlay.classList.add('active');
         document.body.classList.add('menu-open');
-        menuBtn.classList.add('active');
-        menuBtn.innerHTML = '<i class="fas fa-times"></i>';
-        menuBtn.setAttribute('aria-expanded', 'true');
+        this.menuBtn.setAttribute('aria-expanded', 'true');
+        this.menuBtn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
         this.isOpen = true;
 
-        console.log('📱 Menu aberto');
+        // Trap focus no menu
+        this.trapFocus();
     }
 
-    closeMenu() {
-        const menuBtn = document.getElementById('mobileMenuBtn');
-
-        if (!this.mobileNav || !menuBtn) return;
-
-        this.mobileNav.classList.remove('show');
-        this.overlay.classList.remove('active');
+    close() {
+        this.navLinks.classList.remove('active');
+        this.menuOverlay.classList.remove('active');
         document.body.classList.remove('menu-open');
-        menuBtn.classList.remove('active');
-        menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-        menuBtn.setAttribute('aria-expanded', 'false');
+        this.menuBtn.setAttribute('aria-expanded', 'false');
+        this.menuBtn.innerHTML = '<i class="fas fa-bars" aria-hidden="true"></i>';
         this.isOpen = false;
+    }
 
-        console.log('📱 Menu fechado');
+    trapFocus() {
+        const focusableElements = this.navLinks.querySelectorAll('a, button');
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        this.navLinks.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    e.preventDefault();
+                    lastElement.focus();
+                } else if (!e.shiftKey && document.activeElement === lastElement) {
+                    e.preventDefault();
+                    firstElement.focus();
+                }
+            }
+        });
+
+        firstElement.focus();
+    }
+
+    destroy() {
+        this.menuBtn.removeEventListener('click', this.handleClick);
+        this.menuOverlay.removeEventListener('click', this.handleClick);
+        document.removeEventListener('keydown', this.handleKeydown);
+        window.removeEventListener('resize', this.handleResize);
     }
 }
-
-// =============================================
-// SISTEMA DE FORMULÁRIO DE CONTATO
-// =============================================
 
 class ContactFormSystem {
     constructor() {
         this.isSubmitting = false;
-        this.phoneMaskSystem = new PhoneMaskSystem();
+        this.phoneMaskSystem = null;
+        this.form = document.getElementById('contactForm');
+        this.submitBtn = document.getElementById('submitBtn');
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.emailjsInitialized = false;
     }
 
     init() {
+        if (!this.form) return;
+
+        this.phoneMaskSystem = new PhoneMaskSystem(document.getElementById('phone'));
         this.phoneMaskSystem.init();
-        this.bindFormEvents();
         this.initEmailJS();
-        console.log('📧 Sistema de formulário inicializado!');
+        this.bindEvents();
+        this.setupRealTimeValidation();
     }
 
     initEmailJS() {
         try {
+            // ✅ SUAS CONFIGURAÇÕES ORIGINAIS
             emailjs.init("IHYyQz4Gbk-EPOTil");
             this.emailjsInitialized = true;
-            console.log('✅ EmailJS inicializado com sucesso!');
+            console.log('✅ EmailJS inicializado!');
         } catch (error) {
             console.error('❌ Erro ao inicializar EmailJS:', error);
             this.emailjsInitialized = false;
         }
     }
 
-    bindFormEvents() {
-        const contactForm = document.getElementById('contactForm');
-        if (!contactForm) return;
-
-        contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
-        this.setupRealTimeValidation();
+    bindEvents() {
+        this.form.addEventListener('submit', this.handleSubmit);
     }
 
     setupRealTimeValidation() {
-        const inputs = document.querySelectorAll('#contactForm input, #contactForm textarea, #contactForm select');
+        const inputs = this.form.querySelectorAll('input, textarea, select');
 
         inputs.forEach(input => {
             input.addEventListener('blur', () => this.validateField(input));
@@ -329,57 +267,67 @@ class ContactFormSystem {
 
     validateField(field) {
         const value = field.value.trim();
+        let isValid = true;
+        let error = '';
 
         switch (field.type) {
             case 'text':
                 if (field.id === 'name' && value.length < 2) {
-                    this.showFieldError(field, 'Nome deve ter pelo menos 2 caracteres');
-                    return false;
+                    isValid = false;
+                    error = 'Nome deve ter pelo menos 2 caracteres';
                 }
                 break;
 
             case 'email':
-                if (!this.isValidEmail(value)) {
-                    this.showFieldError(field, 'Email inválido');
-                    return false;
+                if (value && !this.isValidEmail(value)) {
+                    isValid = false;
+                    error = 'Email inválido';
                 }
                 break;
 
             case 'tel':
-                if (!this.isValidPhone(value)) {
-                    this.showFieldError(field, 'Telefone inválido. Use: (21) 99999-9999');
-                    return false;
+                if (value && !this.phoneMaskSystem.isValidPhone(value)) {
+                    isValid = false;
+                    error = 'Telefone inválido. Use: (21) 99999-9999';
+                }
+                break;
+
+            case 'textarea':
+                if (value.length < 10) {
+                    isValid = false;
+                    error = 'Mensagem muito curta (mín. 10 caracteres)';
+                } else if (value.length > 1000) {
+                    isValid = false;
+                    error = 'Mensagem muito longa (máx. 1000 caracteres)';
                 }
                 break;
         }
 
-        this.clearFieldError(field);
-        return true;
+        if (field.required && !value) {
+            isValid = false;
+            error = 'Campo obrigatório';
+        }
+
+        if (!isValid) {
+            this.showFieldError(field, error);
+        } else {
+            this.clearFieldError(field);
+        }
+
+        return isValid;
     }
 
     isValidEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    isValidPhone(phone) {
-        return /^\(\d{2}\)\s?\d{4,5}-\d{4}$/.test(phone);
-    }
-
     showFieldError(field, message) {
         this.clearFieldError(field);
-
         field.classList.add('validation-error');
 
         const errorElement = document.createElement('div');
         errorElement.className = 'field-error';
         errorElement.textContent = message;
-        errorElement.style.cssText = `
-            color: #f44336;
-            font-size: 0.8rem;
-            margin-top: 5px;
-            animation: fadeIn 0.3s ease;
-        `;
-
         field.parentNode.appendChild(errorElement);
     }
 
@@ -394,15 +342,18 @@ class ContactFormSystem {
 
         if (this.isSubmitting) return;
 
-        const form = e.target;
-        const formData = this.collectFormData(form);
+        const formData = this.collectFormData();
+        const validation = this.validateForm(formData);
 
-        if (!this.validateForm(formData)) return;
+        if (!validation.isValid) {
+            this.showNotification(validation.error, 'error');
+            return;
+        }
 
-        await this.submitForm(formData, form);
+        await this.submitWithEmailJS(formData);
     }
 
-    collectFormData(form) {
+    collectFormData() {
         return {
             name: document.getElementById('name').value.trim(),
             email: document.getElementById('email').value.trim(),
@@ -414,86 +365,82 @@ class ContactFormSystem {
     }
 
     validateForm(data) {
-        if (!data.name || !data.email || !data.phone || !data.subject || !data.message) {
-            this.showNotification('❌ Preencha todos os campos obrigatórios', 'error');
-            return false;
+        const requiredFields = ['name', 'email', 'phone', 'subject', 'message'];
+
+        for (let field of requiredFields) {
+            if (!data[field]) {
+                return { isValid: false, error: 'Preencha todos os campos obrigatórios' };
+            }
         }
 
         if (!this.isValidEmail(data.email)) {
-            this.showNotification('❌ Email inválido', 'error');
-            return false;
+            return { isValid: false, error: 'Email inválido' };
         }
 
-        if (!this.isValidPhone(data.phone)) {
-            this.showNotification('❌ Telefone inválido. Use: (21) 99999-9999', 'error');
-            return false;
+        if (!this.phoneMaskSystem.isValidPhone(data.phone)) {
+            return { isValid: false, error: 'Telefone inválido' };
         }
 
         if (data.message.length < 10) {
-            this.showNotification('❌ Mensagem muito curta (mín. 10 caracteres)', 'error');
-            return false;
+            return { isValid: false, error: 'Mensagem muito curta (mín. 10 caracteres)' };
         }
 
-        if (data.message.length > 1000) {
-            this.showNotification('❌ Mensagem muito longa (máx. 1000 caracteres)', 'error');
-            return false;
-        }
-
-        return true;
+        return { isValid: true };
     }
 
-    async submitForm(formData, formElement) {
+    async submitWithEmailJS(formData) {
         this.isSubmitting = true;
-        const submitBtn = document.getElementById('submitBtn');
-        const originalText = submitBtn.innerHTML;
+        const originalText = this.submitBtn.innerHTML;
 
         try {
             if (!this.emailjsInitialized) {
-                throw new Error('EmailJS não foi inicializado corretamente');
+                throw new Error('EmailJS não foi inicializado');
             }
 
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-            submitBtn.disabled = true;
+            this.submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            this.submitBtn.disabled = true;
 
             console.log('📤 Enviando dados:', formData);
 
-            // ✅ VARIÁVEIS EXATAS DO SEU TEMPLATE
+            // ✅ CONFIGURAÇÕES ORIGINAIS DO SEU EMAILJS
             const templateParams = {
-                name: formData.name,        // {{name}} no template
-                email: formData.email,      // {{email}} no template  
-                phone: formData.phone,      // {{phone}} no template
-                subject: formData.subject,  // {{subject}} no template
-                message: formData.message,  // {{message}} no template
-                date: formData.date         // {{date}} no template
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                subject: formData.subject,
+                message: formData.message,
+                date: formData.date
             };
 
-            console.log('📝 Parâmetros enviados para template:', templateParams);
+            console.log('📝 Parâmetros para template:', templateParams);
 
+            // ✅ SERVICE ID E TEMPLATE ID ORIGINAIS
             await emailjs.send(
-                PORTFOLIO_CONFIG.EMAILJS.SERVICE_ID,
-                PORTFOLIO_CONFIG.EMAILJS.TEMPLATE_ID,
+                "service_v7jlvg8",    // Seu Service ID
+                "template_wper866",   // Seu Template ID  
                 templateParams
             );
 
             console.log('✅ Email enviado com sucesso!');
             this.showNotification('✅ Mensagem enviada com sucesso! Entrarei em contato em breve.', 'success');
-            formElement.reset();
+            this.form.reset();
 
         } catch (error) {
             console.error('❌ Erro ao enviar email:', error);
 
             let errorMessage = '❌ Erro ao enviar mensagem. Tente novamente.';
+
             if (error.status === 400) {
                 errorMessage = '❌ Erro de configuração. Verifique Service ID e Template ID.';
-            } else if (error.text && error.text.includes('template ID')) {
-                errorMessage = '❌ Template ID não encontrado. Verifique no dashboard.';
+            } else if (error.text && error.text.includes('template')) {
+                errorMessage = '❌ Template não encontrado. Verifique no dashboard.';
             }
 
             this.showNotification(errorMessage, 'error');
 
         } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
+            this.submitBtn.innerHTML = originalText;
+            this.submitBtn.disabled = false;
             this.isSubmitting = false;
         }
     }
@@ -506,24 +453,7 @@ class ContactFormSystem {
         notification.className = `form-notification ${type}`;
         notification.innerHTML = `
             <span>${message}</span>
-            <button onclick="this.parentElement.remove()">&times;</button>
-        `;
-
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === 'success' ? '#4CAF50' : '#f44336'};
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            max-width: 400px;
-            animation: slideIn 0.3s ease;
+            <button onclick="this.parentElement.remove()" aria-label="Fechar notificação">&times;</button>
         `;
 
         document.body.appendChild(notification);
@@ -532,21 +462,26 @@ class ContactFormSystem {
             if (notification.parentElement) notification.remove();
         }, 5000);
     }
-}
 
-// =============================================
-// SISTEMA DE TEMA (DARK/LIGHT MODE)
-// =============================================
+    destroy() {
+        if (this.phoneMaskSystem) {
+            this.phoneMaskSystem.destroy();
+        }
+        this.form.removeEventListener('submit', this.handleSubmit);
+    }
+}
 
 class ThemeSystem {
     constructor() {
         this.currentTheme = 'light';
+        this.themeToggle = document.getElementById('themeToggle');
+        this.themeIcon = this.themeToggle.querySelector('.theme-icon');
+        this.handleClick = this.handleClick.bind(this);
     }
 
     init() {
         this.loadSavedTheme();
-        this.bindThemeToggle();
-        console.log('🌙 Sistema de tema inicializado!');
+        this.bindEvents();
     }
 
     loadSavedTheme() {
@@ -556,201 +491,187 @@ class ThemeSystem {
         this.setTheme(savedTheme);
     }
 
-    setTheme(theme) {
-        const body = document.body;
-        const themeToggle = document.getElementById('themeToggle');
+    bindEvents() {
+        this.themeToggle.addEventListener('click', this.handleClick);
 
-        if (theme === 'dark') {
-            body.classList.add('dark-mode');
-            themeToggle.textContent = '☀️';
-        } else {
-            body.classList.remove('dark-mode');
-            themeToggle.textContent = '🌙';
-        }
-
-        this.currentTheme = theme;
-        localStorage.setItem('theme', theme);
-    }
-
-    bindThemeToggle() {
-        const themeToggle = document.getElementById('themeToggle');
-        if (!themeToggle) return;
-
-        themeToggle.addEventListener('click', () => {
-            const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-            this.setTheme(newTheme);
-        });
-    }
-}
-
-// =============================================
-// SISTEMA DE SCROLL E NAVEGAÇÃO
-// =============================================
-
-class ScrollSystem {
-    constructor() {
-        this.init();
-    }
-
-    init() {
-        this.bindSmoothScroll();
-        this.bindNavbarScroll();
-        console.log('🎯 Sistema de scroll inicializado!');
-    }
-
-    bindSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = document.querySelector(anchor.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    }
-
-    bindNavbarScroll() {
-        const nav = document.querySelector('nav');
-        if (!nav) return;
-
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const body = document.body;
-
-            if (scrollY > 100) {
-                nav.style.background = body.classList.contains('dark-mode')
-                    ? 'rgba(30, 30, 30, 0.98)'
-                    : 'rgba(255, 255, 255, 0.98)';
-            } else {
-                nav.style.background = body.classList.contains('dark-mode')
-                    ? 'rgba(30, 30, 30, 0.95)'
-                    : 'rgba(255, 255, 255, 0.95)';
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                this.setTheme(e.matches ? 'dark' : 'light');
             }
         });
     }
+
+    handleClick() {
+        const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+    }
+
+    setTheme(theme) {
+        document.body.classList.toggle('dark-mode', theme === 'dark');
+        this.themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        this.themeToggle.setAttribute('aria-label',
+            theme === 'dark' ? 'Alternar para tema claro' : 'Alternar para tema escuro');
+        this.currentTheme = theme;
+
+        // Update navbar background based on theme and scroll
+        this.updateNavbarBackground();
+    }
+
+    updateNavbarBackground() {
+        const nav = document.querySelector('nav');
+        const scrollY = window.scrollY;
+
+        if (scrollY > 100) {
+            nav.style.background = this.currentTheme === 'dark'
+                ? 'rgba(30, 30, 30, 0.98)'
+                : 'rgba(255, 255, 255, 0.98)';
+        } else {
+            nav.style.background = this.currentTheme === 'dark'
+                ? 'rgba(30, 30, 30, 0.95)'
+                : 'rgba(255, 255, 255, 0.95)';
+        }
+    }
+
+    destroy() {
+        this.themeToggle.removeEventListener('click', this.handleClick);
+    }
+}
+
+class ScrollSystem {
+    constructor() {
+        this.nav = document.querySelector('nav');
+        this.themeSystem = null;
+        this.handleScroll = this.throttle(this.handleScroll.bind(this), 16);
+        this.handleSmoothScroll = this.handleSmoothScroll.bind(this);
+    }
+
+    init(themeSystem) {
+        this.themeSystem = themeSystem;
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        window.addEventListener('scroll', this.handleScroll, { passive: true });
+
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', this.handleSmoothScroll);
+        });
+    }
+
+    handleScroll() {
+        const scrollY = window.scrollY;
+
+        if (this.nav) {
+            if (scrollY > 100) {
+                this.nav.style.background = document.body.classList.contains('dark-mode')
+                    ? 'rgba(30, 30, 30, 0.98)'
+                    : 'rgba(255, 255, 255, 0.98)';
+            } else {
+                this.nav.style.background = document.body.classList.contains('dark-mode')
+                    ? 'rgba(30, 30, 30, 0.95)'
+                    : 'rgba(255, 255, 255, 0.95)';
+            }
+        }
+    }
+
+    handleSmoothScroll(e) {
+        const href = this.getHash(e.currentTarget);
+        const target = document.querySelector(href);
+
+        if (target) {
+            e.preventDefault();
+
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+
+            // Update URL without jumping
+            if (history.pushState) {
+                history.pushState(null, null, href);
+            }
+        }
+    }
+
+    getHash(element) {
+        return element.getAttribute('href');
+    }
+
+    throttle(func, limit) {
+        let inThrottle;
+        return function (...args) {
+            if (!inThrottle) {
+                func.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        }
+    }
+
+    destroy() {
+        window.removeEventListener('scroll', this.handleScroll);
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.removeEventListener('click', this.handleSmoothScroll);
+        });
+    }
+}
+
+class PortfolioApp {
+    constructor() {
+        this.themeSystem = new ThemeSystem();
+        this.scrollSystem = new ScrollSystem();
+        this.contactFormSystem = new ContactFormSystem();
+        this.mobileMenu = new MobileMenu();
+    }
+
+    init() {
+        // Inicializar sistemas
+        this.themeSystem.init();
+        this.scrollSystem.init(this.themeSystem);
+        this.contactFormSystem.init();
+        this.mobileMenu.init();
+
+        // Atualizar ano no footer
+        this.updateCurrentYear();
+
+        // Marcar como carregado
+        document.body.classList.add('loaded');
+
+        console.log('✅ Portfólio inicializado com sucesso!');
+    }
+
+    updateCurrentYear() {
+        const yearElement = document.getElementById('current-year');
+        if (yearElement) {
+            yearElement.textContent = new Date().getFullYear();
+        }
+    }
+
+    destroy() {
+        this.themeSystem.destroy();
+        this.scrollSystem.destroy();
+        this.contactFormSystem.destroy();
+        this.mobileMenu.destroy();
+    }
 }
 
 // =============================================
-// INICIALIZAÇÃO DO SISTEMA
+// INICIALIZAÇÃO
 // =============================================
 
-const themeSystem = new ThemeSystem();
-const scrollSystem = new ScrollSystem();
-const contactFormSystem = new ContactFormSystem();
-let mobileMenu;
+let app;
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Inicializando portfólio...');
-
-    themeSystem.init();
-    scrollSystem.init();
-    contactFormSystem.init();
-    mobileMenu = new MobileMenu();
-
-    document.body.classList.add('loaded');
-
-    console.log('✅ Portfólio inicializado com sucesso!');
+    app = new PortfolioApp();
+    app.init();
 });
 
-if (document.readyState === 'interactive' || document.readyState === 'complete') {
-    setTimeout(() => {
-        themeSystem.init();
-        scrollSystem.init();
-        contactFormSystem.init();
-        mobileMenu = new MobileMenu();
-    }, 100);
-}
-
-// =============================================
-// ESTILOS DINÂMICOS
-// =============================================
-
-const dynamicStyles = `
-@keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.form-notification button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background 0.3s ease;
-}
-
-.form-notification button:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.validation-error {
-    border-color: #f44336 !important;
-    animation: shake 0.3s ease !important;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-
-.field-error {
-    color: #f44336 !important;
-    font-size: 0.8rem !important;
-    margin-top: 5px !important;
-    animation: fadeIn 0.3s ease !important;
-}
-
-.phone-typing {
-    border-color: #2196F3 !important;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1) !important;
-}
-
-.phone-valid {
-    border-color: #4CAF50 !important;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1) !important;
-}
-
-.phone-invalid {
-    border-color: #f44336 !important;
-    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.1) !important;
-}
-
-.phone-hint {
-    color: #f44336;
-    font-size: 0.8rem;
-    margin-top: 5px;
-    animation: fadeIn 0.3s ease;
-}
-
-#phone::placeholder {
-    color: #999;
-    font-size: 0.9rem;
-}
-
-#phone:focus {
-    border-color: #8A2BE2;
-    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
-}
-`;
-
-const styleSheet = document.createElement('style');
-styleSheet.textContent = dynamicStyles;
-document.head.appendChild(styleSheet);
+// Cleanup na unload da página
+window.addEventListener('beforeunload', () => {
+    if (app) {
+        app.destroy();
+    }
+});
