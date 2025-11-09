@@ -1,0 +1,136 @@
+# =============================================
+# ARQUIVOS SENSÍVEIS - NUNCA SUBIR PARA GIT!
+# =============================================
+
+# Chaves de API e credenciais
+.env
+.env.local
+.env.production
+.env.development
+*.key
+*.pem
+*.crt
+
+# Configurações sensíveis
+config.js
+secrets.js
+credentials.json
+firebase-config.js
+
+# EmailJS - NUNCA subir chaves
+emailjs-keys.js
+email-config.js
+
+# =============================================
+# DEPENDÊNCIAS E BUILD
+# =============================================
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.nuxt/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# =============================================
+# SISTEMA E IDE
+# =============================================
+
+# Sistema
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# VS Code
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# =============================================
+# NETLIFY
+# =============================================
+
+# Netlify
+.netlify/
+functions/generated/
+
+# =============================================
+# LOGS E TEMPORÁRIOS
+# =============================================
+
+# Logs
+*.log
+logs/
+
+# Temporários
+*.tmp
+*.temp
+.tmp/
+
+# =============================================
+# BACKUPS
+# =============================================
+*.backup
+*.bak
+*.old
+
+# =============================================
+# USUÁRIO ESPECÍFICO
+# =============================================
+
+# Seu sistema operacional (descomente o seu)
+# Windows
+# [Bb]in/
+# [Oo]bj/
+# *.user
+# *.suo
+
+# macOS
+# *.DS_Store?
+
+# Linux
+# *~
+
+# =============================================
+# PROJETOS FUTUROS
+# =============================================
+
+# Se for usar React/Vue etc no futuro
+.eslintcache
+.coverage/
+.nyc_output/
+
+# =============================================
+# ARQUIVOS DO SEU PROJETO QUE NÃO DEVE SUBIR
+# =============================================
+
+# Suas notas pessoais
+notes.txt
+TODO.md
+ideas.md
+
+# Design assets (se tiver muitos)
+assets/raw/
+assets/psd/
+assets/ai/
+assets/sketch/
+
+# Documentação interna
+docs/internal/
