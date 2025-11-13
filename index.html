@@ -10,7 +10,16 @@
     <meta name="keywords" content="desenvolvedor, full stack, mobile, react, node.js, javascript, portfolio">
     <meta name="author" content="Tarcísio Carneiro">
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/skills.css">
+    <link rel="stylesheet" href="css/portfolio.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -89,37 +98,29 @@
 
     <main id="main-content">
         <!-- About Section -->
+        <!-- About Section -->
         <section id="about">
             <div class="container">
                 <h2 data-aos="fade-up">Sobre Mim</h2>
                 <div class="about-content">
-                    <div data-aos="fade-right">
-                        <div class="profile-img-placeholder">
-                            <i class="fas fa-user fa-5x" aria-hidden="true"></i>
-                            <p>FOTO</p>
-                        </div>
-                    </div>
                     <div class="about-text" data-aos="fade-left">
                         <h3>Desenvolvedor & Apaixonado por Tecnologia</h3>
-                        <p>Desde muito novo já tinha um contato intenso com computadores, smartphones e video games.
-                            Hoje em
-                            dia prefiro o computador, mas já fui da época de preferir consoles e jogos. Minha paixão por
-                            tecnologia é ampla - não me prendo apenas ao desenvolvimento de sites e aplicativos, gosto
-                            de
-                            tudo um pouco!</p>
-
-                        <p>Minha jornada inclui o <strong>técnico em Informática pelo SENAC RJ</strong>, onde aprendi
-                            desde
-                            manutenção de computadores até desenvolvimento com Ionic. Atualmente estou cursando
+                        <p>
+                            Desde muito novo já tinha um contato intenso com computadores, smartphones e video games.
+                            Hoje em dia prefiro o computador, mas já fui da época de preferir consoles e jogos. Minha
+                            paixão por tecnologia é ampla - não me prendo apenas ao desenvolvimento de sites e
+                            aplicativos, gosto de tudo um pouco!</p>
+                        <p>
+                            Minha jornada inclui o <strong>técnico em Informática pelo SENAC RJ</strong>, onde aprendi
+                            desde manutenção de computadores até desenvolvimento com Ionic. Atualmente estou cursando
                             <strong>Análise e Desenvolvimento de Sistemas (ADS)</strong>, aprofundando meus
-                            conhecimentos em
-                            programação.
+                            conhecimentos em programação.
                         </p>
 
-                        <p>Além do desenvolvimento, tenho experiência em <strong>suporte técnico</strong> e posso ser
-                            aquele
-                            "carinha do bairro que conserta até impressoras"! Me importo muito com a documentação e os
-                            detalhes do que faço, sempre buscando registrar e compartilhar conhecimento.</p>
+                        <p>
+                            Além do desenvolvimento, tenho experiência em <strong>suporte técnico</strong> e posso ser
+                            aquele "carinha do bairro que conserta até impressoras"! Me importo muito com a documentação
+                            e os detalhes do que faço, sempre buscando registrar e compartilhar conhecimento.</p>
 
                         <div class="about-features">
                             <div class="feature">
@@ -128,7 +129,7 @@
                             </div>
                             <div class="feature">
                                 <i class="fas fa-mobile-alt" aria-hidden="true"></i>
-                                <span>Desenvolvimento Mobile</span>
+                                <span>Desenvolvedor Mobile em Formação</span>
                             </div>
                             <div class="feature">
                                 <i class="fas fa-laptop-code" aria-hidden="true"></i>
@@ -238,6 +239,37 @@
                             <span>65%</span>
                         </div>
                     </div>
+
+                    <div class="skill-card" data-aos="flip-left" data-aos-delay="300">
+                        <div class="skill-icon">
+                            <i class="fas fa-users" aria-hidden="true"></i>
+                        </div>
+                        <h3>Habilidade Interpessoal</h3>
+                        <p>Comunicação eficaz, trabalho em equipe, adaptabilidade e proatividade</p>
+                        <div class="skill-level">
+                            <div class="level-bar">
+                                <div class="level-progress" style="width: 80%"></div>
+                            </div>
+                            <span>80%</span>
+                        </div>
+                    </div>
+
+
+                    <!-- Habilidade Criativa -->
+                    <div class="skill-card" data-aos="flip-left" data-aos-delay="350">
+                        <div class="skill-icon">
+                            <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                        </div>
+                        <h3>Habilidade Criativa</h3>
+                        <p>Raciocínio estético, soluções inovadoras e criatividade técnica
+                        </p>
+                        <div class="skill-level">
+                            <div class="level-bar">
+                                <div class="level-progress" style="width: 75%"></div>
+                            </div>
+                            <span>75%</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="technologies" data-aos="fade-up">
@@ -250,19 +282,13 @@
                         <span class="tech-item">React</span>
                         <span class="tech-item">React Native</span>
                         <span class="tech-item">Ionic</span>
-                        <span class="tech-item">Vue.js</span>
                         <span class="tech-item">Node.js</span>
-                        <span class="tech-item">Express</span>
                         <span class="tech-item">MySQL</span>
-                        <span class="tech-item">MongoDB</span>
                         <span class="tech-item">Firebase</span>
                         <span class="tech-item">Git</span>
                         <span class="tech-item">GitHub</span>
-                        <span class="tech-item">Figma</span>
-                        <span class="tech-item">VS Code</span>
+                        <span class="tech-item">Visual Studio Code</span>
                         <span class="tech-item">NPM</span>
-                        <span class="tech-item">Yarn</span>
-                        <span class="tech-item">REST APIs</span>
                     </div>
                 </div>
             </div>
@@ -302,7 +328,6 @@
                                 <span class="tech-tag">Angular</span>
                                 <span class="tech-tag">TypeScript</span>
                                 <span class="tech-tag">CSS3</span>
-                                <span class="tech-tag">RxJS</span>
                             </div>
 
                             <div class="project-links">
@@ -342,7 +367,6 @@
                                 <span class="tech-tag">CSS3</span>
                                 <span class="tech-tag">HTML5</span>
                                 <span class="tech-tag">Canvas</span>
-                                <span class="tech-tag">LocalStorage</span>
                             </div>
 
                             <div class="project-links">
@@ -374,9 +398,7 @@
                                 <ul>
                                     <li>Multiplataforma (iOS/Android)</li>
                                     <li>Navegação com React Navigation</li>
-                                    <li>Integração com APIs REST</li>
                                     <li>UI/UX moderna com componentes</li>
-                                    <li>Estado gerenciado com Context API</li>
                                 </ul>
                             </div>
 
@@ -384,8 +406,6 @@
                                 <span class="tech-tag">React Native</span>
                                 <span class="tech-tag">JavaScript</span>
                                 <span class="tech-tag">Firebase</span>
-                                <span class="tech-tag">API REST</span>
-                                <span class="tech-tag">Context API</span>
                             </div>
 
                             <div class="project-links">
@@ -529,8 +549,6 @@
             </div>
         </section>
     </main>
-
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
