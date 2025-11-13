@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="../css/responsive.css">
     <title>Site em Manutenção</title>
 
     <style>
-        /* ======= RESET ======= */
         * {
             margin: 0;
             padding: 0;
@@ -18,7 +16,6 @@
 
         body {
             background: #0a0a0a;
-            /* fundo escuro elegante */
             color: #fff;
             display: flex;
             flex-direction: column;
@@ -88,6 +85,22 @@
 
     <!-- Ícones (Font Awesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- SCRIPT QUE VERIFICA SE VOLTOU AO NORMAL -->
+    <script>
+        // Verifica a cada 5 segundos se o site voltou
+        setInterval(() => {
+            fetch('/mode.json')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.mode === "open") {
+                        // Se voltou ao normal, redireciona IMEDIATAMENTE
+                        window.location.href = '/html/index.html';
+                    }
+                })
+                .catch(err => console.error("Erro:", err));
+        }, 5000); // Verifica a cada 5 segundos
+    </script>
 </head>
 
 <body>
@@ -100,7 +113,7 @@
         <a href="https://www.linkedin.com/in/tarcisio-ayres012/" target="_blank"><i class="fab fa-linkedin"></i></a>
     </div>
 
-    <script src="js/switch.js"></script>
+    <!-- Script original também -->
+    <script src="../js/switch.js"></script>
 </body>
-
 </html>
