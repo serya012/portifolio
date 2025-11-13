@@ -1,0 +1,124 @@
+/* ===== CONTACT SECTION ===== */
+
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.contact-icon {
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+.social-links h4 {
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.social-link:hover {
+    transform: translateY(-3px);
+    background: var(--secondary);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--text);
+    transition: var(--transition);
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.dark-mode .form-group input,
+.dark-mode .form-group textarea,
+.dark-mode .form-group select {
+    border: 1px solid #444;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.1);
+}
+
+/* Custom Select */
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select select {
+    width: 100%;
+    appearance: none;
+    cursor: pointer;
+}
+
+.select-arrow {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    color: var(--text);
+    pointer-events: none;
+    transition: var(--transition);
+}
+
+.custom-select:focus-within .select-arrow {
+    color: var(--primary);
+}

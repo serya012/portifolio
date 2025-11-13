@@ -1,0 +1,97 @@
+
+
+/* Notifications */
+.form-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 400px;
+    animation: slideIn 0.3s ease;
+}
+
+.form-notification.success {
+    background: var(--success);
+    color: white;
+}
+
+.form-notification.error {
+    background: var(--error);
+    color: white;
+}
+
+.form-notification button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.form-notification button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Validation */
+.validation-error {
+    border-color: var(--error) !important;
+}
+
+.field-error {
+    color: var(--error);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.phone-typing {
+    border-color: #2196F3;
+}
+
+.phone-valid {
+    border-color: var(--success);
+}
+
+.phone-invalid {
+    border-color: var(--error);
+}
+
+.phone-hint {
+    color: var(--error);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
