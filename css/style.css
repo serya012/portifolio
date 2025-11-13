@@ -289,12 +289,14 @@ h2::after {
 
 /* About */
 .about-content {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 50px;
-    align-items: center;
+    display: block;
+    /* Mudar de grid para block */
+    text-align: center;
+    /* Centralizar o conteúdo */
 }
 
+/* REMOVER ou COMENTAR estas regras */
+/*
 .profile-img-placeholder {
     width: 100%;
     height: 300px;
@@ -309,6 +311,14 @@ h2::after {
     flex-direction: column;
     gap: 15px;
 }
+*/
+
+.about-text {
+    max-width: 800px;
+    /* Limitar largura para melhor leitura */
+    margin: 0 auto;
+    /* Centralizar */
+}
 
 .about-text h3 {
     font-size: 1.8rem;
@@ -319,6 +329,8 @@ h2::after {
 .about-text p {
     margin-bottom: 20px;
     font-size: 1.1rem;
+    text-align: left;
+    /* Manter texto alinhado à esquerda */
 }
 
 .about-features {
@@ -335,6 +347,8 @@ h2::after {
     padding: 10px;
     background: var(--card-bg);
     border-radius: 8px;
+    justify-content: center;
+    /* Centralizar os ícones */
 }
 
 .feature i {
@@ -730,7 +744,7 @@ footer {
     right: 20px;
     padding: 15px 20px;
     border-radius: 5px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     z-index: 10000;
     display: flex;
     align-items: center;
@@ -806,19 +820,41 @@ footer {
 
 /* Animações */
 @keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 /* Ajuste para 6 cards de habilidades */
