@@ -1,0 +1,50 @@
+/* ===== ABOUT SECTION ===== */
+
+.about-content {
+    text-align: center;
+}
+
+.about-text {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.about-text h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    font-weight: 400;
+}
+
+.about-text p {
+    margin-bottom: 1.5rem;
+    font-size: 1.05rem;
+    text-align: left;
+    line-height: 1.7;
+}
+
+.about-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--card-bg);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.feature:hover {
+    transform: translateY(-2px);
+}
+
+.feature i {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
