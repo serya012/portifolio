@@ -7,6 +7,7 @@ header {
     padding: 120px 0 80px;
     text-align: center;
     position: relative;
+    z-index: 100;
 }
 
 .hero-content {
@@ -176,11 +177,13 @@ nav {
 
 /* Cores específicas para cada tema */
 .dark-mode .theme-toggle .bi-sun-fill {
-    color: #ffd700; /* Sol dourado no tema escuro */
+    color: #ffd700;
+    /* Sol dourado no tema escuro */
 }
 
 .theme-toggle .bi-moon-fill {
-    color: var(--text); /* Cor do texto no tema claro */
+    color: var(--text);
+    /* Cor do texto no tema claro */
 }
 
 .mobile-menu-btn {
